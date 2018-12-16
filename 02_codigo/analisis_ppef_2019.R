@@ -103,7 +103,7 @@ bd_ramo %>%
   scale_y_continuous(breaks = seq(0, 800000, 100000), label = comma) +
   scale_color_manual(values = c("#74c476", "tomato")) +
   facet_wrap(~ tipo, ncol = 4) +
-  labs(title = str_wrap(str_to_upper("presupuesto de cada ramo de acuerdo con PPEF 2019 y el PEF 2018"), width = 70), 
+  labs(title = str_wrap(str_to_upper("presupuesto de cada ramo de acuerdo con PPEF 2019 y PEF 2018"), width = 70), 
        subtitle = "Cifras en términos reales y millones de pesos",
        x = NULL, 
        y = "Millones de pesos\n",
@@ -216,4 +216,32 @@ bd_ramo %>%
 
 ggsave(filename = "variacion_ramos.png", path = "03_graficas/", width = 15, height = 10, dpi = 100)  
 
+
+### Gráfica: Presupuesto clasificación funcional de acuerdo con PPEF 2019 y el PEF de 2018 ----
+bd_funcion %>% 
+  # count(funcion) %>% print(n = Inf)
+  mutate(etiqueta = ifelse(funcion == "Recreación, Cultura y Otras Manifestaciones Sociales" & año == 2019, "Recreación y Cultura", funcion)) %>% 
+  mutate(etiqueta = ifelse(valor > 100000 & año == 2019 | funcion == "Ciencia, Tecnología e Innovación" & año == 2019 | etiqueta == "Recreación y Cultura" & año == 2019 , str_wrap(etiqueta, width = 25), ""),
+         tipo = str_wrap(str_to_upper(tipo), width = 30)) %>%
+  ggplot(aes(año, valor)) +
+  geom_line(aes(group = funcion, color = color_lineas), size = 2, alpha = 0.7) +
+  geom_point(aes(color = color_lineas), size = 3) +
+  geom_text_repel(aes(label = etiqueta), fontface = "bold", nudge_y = 2, force = 2, color = "grey30") +
+  scale_x_continuous(limits = c(2017.9, 2019.1), breaks = c(2018, 2019)) +
+  scale_y_continuous(breaks = seq(0, 2000000, 250000), label = comma) +
+  scale_color_manual(values = c("#74c476", "tomato")) +
+  facet_wrap(~ tipo, ncol = 4) +
+  labs(title = str_wrap(str_to_upper("presupuesto PPEF 2019 vs. PEF 2018, clasificación funcional"), width = 70), 
+       subtitle = "Cifras en términos reales y millones de pesos",
+       x = NULL, 
+       y = "Millones de pesos\n",
+       caption = "\nSebastián Garrido de Sierra / @segasi / Fuente: SHCP, url: bit.ly/PPEF2019") +
+  tema +
+  theme(strip.background = element_rect(color = "grey70", fill = "grey70"),
+        strip.text = element_text(color = "white", size = 12),
+        panel.grid.major.x = element_blank(),
+        legend.position = "none")
+
+
+ggsave(filename = "presupuesto_funcional_2018_2019.png", path = "03_graficas/", width = 15, height = 10, dpi = 100)  
 
