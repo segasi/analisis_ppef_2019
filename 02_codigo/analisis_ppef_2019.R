@@ -39,20 +39,50 @@ bd_quien <- read_xlsx("01_datos/bd_quien_gasta.xlsx")
 ### Transformar datos ----
 
 bd_funcion <- bd_para_que %>% 
-  mutate(var_real = var_real*100) %>% 
+  mutate(var_real = var_real*100,
+         color_lineas = ifelse(var_real >= 0, "aumento", "disminuyo")) %>%
   gather(key = fuente, 
          value = valor,
-         -c(funcion, tipo, var_real)) %>% 
+         -c(funcion, tipo, var_real, color_lineas)) %>% 
   mutate(año = ifelse(fuente == "proyecto_2019", 2019, 2018),
          var_real = ifelse(año == 2018, 0, var_real)) 
 
-bd_ramo <- bd_quien %>% 
-  mutate(var_real = var_real*100) %>% 
+bd_ramo <- 
+  bd_quien %>% 
+  mutate(var_real = var_real*100,
+         color_lineas = ifelse(var_real >= 0, "aumento", "disminuyo")) %>%
   gather(key = fuente, 
          value = valor,
-         -c(ramo, tipo, var_real)) %>% 
+         -c(ramo, tipo, var_real, color_lineas)) %>% 
   mutate(año = ifelse(fuente == "proyecto_2019", 2019, 2018),
-         var_real = ifelse(año == 2018, 0, var_real)) 
+         var_real = ifelse(año == 2018, 0, var_real),
+         ramo_acronimo = case_when(str_detect(ramo, "Estadística") ~ "INEGI", 
+                            str_detect(ramo, "Seguro Social") ~ "IMSS", 
+                            str_detect(ramo, "Petróleos") ~ "PEMEX",
+                            str_detect(ramo, "Electricidad") ~ "CFE",
+                            str_detect(ramo, "Servicios Sociales") ~ "ISSSTE",
+                            str_detect(ramo, "Educación P") ~ "SEP",
+                            str_detect(ramo, "Defensa") ~ "SEDENA",
+                            str_detect(ramo, "Comunicaciones") ~ "SCT",
+                            str_detect(ramo, "Gobernaci") ~ "SEGOB",
+                            str_detect(ramo, "Poder Judicial") ~ "PJF",
+                            str_detect(ramo, "Consejo de la Judi") ~ "CJF",
+                            str_detect(ramo, "Agricultura y D") ~ "SADER",
+                            str_detect(ramo, "Suprema Corte de Justicia de la Nación") ~ "SCJN",
+                            str_detect(ramo, "Trabajo y Previsión Social") ~ "STPS",
+                            str_detect(ramo, "Tribunal Electoral Federal") ~ "TEPJF",
+                            str_detect(ramo, "Tribunal Federal de Justicia Administrativa") ~ "TFJA",
+                            str_detect(ramo, "Oficina de la Presidencia de la República") ~ "Presidencia",
+                            str_detect(ramo, "Instituto Nacional Electoral") ~ "INE",
+                            str_detect(ramo, "Instituto Federal de Telecomunicaciones") ~ "IFT",
+                            str_detect(ramo, "Instituto Nacional de Transparencia, Acceso") ~ "INAI",
+                            str_detect(ramo, "Instituto Nacional para la Evaluación de") ~ "INEE",
+                            str_detect(ramo, "Medio Ambiente y Recursos Naturales") ~ "SEMARNAT",
+                            str_detect(ramo, "Relaciones Exteriores") ~ "SRE",
+                            str_detect(ramo, "Hacienda y Crédito Público") ~ "SHCP",
+                            TRUE ~ ramo)) %>% 
+  count(ramo_acronimo) %>% 
+  print(n = Inf)
 
 
 
