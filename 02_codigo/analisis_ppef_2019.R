@@ -189,7 +189,7 @@ ggsave(filename = "presupuesto_ramos_poderes_org_autonomos_2018_2019.png", path 
 bd_ramo %>% 
   mutate(tipo = str_wrap(str_to_upper(tipo), width = 30),
          ramo_acronimo = ifelse(str_detect(ramo, "Estadística"), "INEGI", ramo),
-         ramo_etiqueta = ifelse(var_real > 20 | var_real < -600, str_wrap(ramo_acronimo, width = 30), ""),
+         ramo_etiqueta = ifelse(var_real > 20, str_wrap(ramo_acronimo, width = 30), ""),
          var_real_etiqueta = ifelse(var_real > 20 | var_real < -600, paste("\n(", var_real, "%)", sep = ""), "")) %>% 
   ggplot(aes(año, var_real)) +
   geom_line(aes(group = ramo, color = color_lineas), size = 1, alpha = 0.7) +
