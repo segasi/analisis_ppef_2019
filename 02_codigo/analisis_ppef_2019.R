@@ -183,3 +183,37 @@ bd_ramo %>%
         legend.position = "none")
 
 ggsave(filename = "presupuesto_ramos_poderes_org_autonomos_2018_2019.png", path = "03_graficas/", width = 15, height = 10, dpi = 100)
+
+
+### Gráfica: Variación % del presupuesto de los ramos, PPEF 2019 vs. PEF 2018 ----
+bd_ramo %>% 
+  mutate(tipo = str_wrap(str_to_upper(tipo), width = 30),
+         ramo_acronimo = ifelse(str_detect(ramo, "Estadística"), "INEGI", ramo),
+         ramo_etiqueta = ifelse(var_real > 20 | var_real < -600, str_wrap(ramo_acronimo, width = 30), ""),
+         var_real_etiqueta = ifelse(var_real > 20 | var_real < -600, paste("\n(", var_real, "%)", sep = ""), "")) %>% 
+  ggplot(aes(año, var_real)) +
+  geom_line(aes(group = ramo, color = color_lineas), size = 1, alpha = 0.7) +
+  geom_point(aes(color = color_lineas), size = 3) +
+  geom_text_repel(aes(label = paste(ramo_etiqueta, var_real_etiqueta, sep = "")), 
+                  fontface = "bold", 
+                  nudge_x = -0.2,
+                  nudge_y = 0.2, 
+                  force = 2) +
+  scale_x_continuous(limits = c(2017.9, 2019.1), breaks = c(2018, 2019)) +
+  scale_y_continuous(limits = c(-50, 1020), breaks = c(0, seq(-100, 1100, 100)), label = comma) +
+  scale_color_manual(values = c("#74c476", "tomato")) +
+  facet_wrap(~ tipo, ncol = 4) +
+  labs(title = str_wrap(str_to_upper("variación % del presupuesto de los ramos, PPEF 2019 vs. PEF 2018"), width = 70), 
+       subtitle = "Variación es en términos reales",
+       x = NULL, 
+       y = "Variación porcentual\n",
+       caption = "\nSebastián Garrido de Sierra / @segasi / Fuente: SHCP, url: bit.ly/PPEF2019") +
+  tema +
+  theme(strip.background = element_rect(color = "grey70", fill = "grey70"),
+        strip.text = element_text(color = "white", size = 12),
+        panel.grid.major.x = element_blank(),
+        legend.position = "none")
+
+ggsave(filename = "variacion_ramos.png", path = "03_graficas/", width = 15, height = 10, dpi = 100)  
+
+
