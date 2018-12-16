@@ -117,3 +117,35 @@ bd_ramo %>%
 ggsave(filename = "presupuesto_ramos_2018_2019.png", path = "03_graficas/", width = 15, height = 10, dpi = 100)  
 
 
+### Gráfica: Presupuesto de los ramos del Poder Ejecutivo de acuerdo con PPEF 2019 y el PEF de 2018 ----
+bd_ramo %>% 
+  filter(tipo == "Poder Ejecutivo") %>% 
+  mutate(tipo = str_wrap(str_to_upper(tipo), width = 30),
+         ramo_etiqueta = ifelse(valor > 40000 & año == 2019, str_wrap(ramo_acronimo, width = 20), ""),
+         var_real_etiqueta = ifelse(var_real > 20 | var_real < -600, paste("\n(", var_real, "%)", sep = ""), "")) %>% 
+  ggplot(aes(año, valor, color = color_lineas)) +
+  geom_line(aes(group = ramo), size = 1, alpha = 0.7) +
+  geom_point(size = 3) +
+  geom_text_repel(aes(label = paste(ramo_etiqueta,
+                                    # var_real_etiqueta,
+                                    sep = "")), 
+                  fontface = "bold", 
+                  nudge_x = 0.1,
+                  nudge_y = 2,
+                  force = 1,
+                  color = "grey40") +
+  scale_x_continuous(limits = c(2018, 2019.01), breaks = c(2018, 2019)) +
+  scale_y_continuous(breaks = seq(0, 800000, 100000), label = comma) +
+  scale_color_manual(values = c("#74c476", "tomato")) +
+  labs(title = str_wrap(str_to_upper("presupuesto de los ramos del poder ejecutivo de acuerdo con PPEF 2019 y PEF 2018"), width = 70), 
+       subtitle = "Cifras en términos reales y millones de pesos",
+       x = NULL, 
+       y = "Millones de pesos\n",
+       caption = "\nSebastián Garrido de Sierra / @segasi / Fuente: SHCP, url: bit.ly/PPEF2019") +
+  tema +
+  theme(strip.background = element_rect(color = "grey70", fill = "grey70"),
+        strip.text = element_text(color = "white", size = 12),
+        panel.grid.major.x = element_blank(),
+        legend.position = "none")
+
+ggsave(filename = "presupuesto_ramos_poder_ejecutivo_2018_2019.png", path = "03_graficas/", width = 15, height = 10, dpi = 100) 
