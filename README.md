@@ -2,4 +2,4 @@
 
 Muy breve análisis del PPEF. Datos tomados de [esta página](bit.ly/PPEF2019).
 
-![](https://segasi.com.mx/github/presupuesto_ramos_2018_2019.png)
+![](http://segasi.com.mx/github/presupuesto_ramos_2018_2019.png)
