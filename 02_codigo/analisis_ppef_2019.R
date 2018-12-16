@@ -25,8 +25,11 @@ tema <-  theme_minimal() +
 
 # Los datos los obtuve de las secciones ¿PARA QUÉ SE GASTA? y ¿QUIÉN GASTA? en esta liga: https://www.transparenciapresupuestaria.gob.mx/es/PTP/infografia_ppef2019#page3
 
+# PEF 2018. Fuente: https://www.transparenciapresupuestaria.gob.mx
+pef_18 <- read_csv("01_datos/presupuesto_mexico__2018.csv", locale = locale(encoding = "latin1"))
+
 # PPEF 2019 completo
-ppef <- read_csv("01_datos/PPEF_2019.csv", locale = locale(encoding = "latin1"))
+ppef_19 <- read_csv("01_datos/PPEF_2019.csv", locale = locale(encoding = "latin1"))
 
 # Datos de ¿Para qué se gasta?
 bd_para_que <- read_xlsx("01_datos/bd_para_que_se_gasta.xlsx")
