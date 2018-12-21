@@ -297,7 +297,6 @@ ggsave(filename = "presupuesto_funcional_2018_2019.png", path = "03_graficas/", 
 ### Gráfica: Cambio % en el presupuesto de los programas del Conacyt ----
 bd %>% 
   filter(ciclo %in% 2018:2019) %>% 
-  clean_names() %>% 
   mutate(desc_pp = case_when(desc_pp == "Fomento Regional de las Capacidades Científicas, Tecnológicas y de Innovación" ~ "Fomento regional de las capacidades científicas, tecnológicas y de innovación",
                              desc_pp == "Sistema nacional de investigadores" ~ "Sistema Nacional de Investigadores",
                              TRUE ~ desc_pp)) %>% 
@@ -342,9 +341,8 @@ ggsave(filename = "conacyt_cambio_porcentual_por_programa_2018_2019.png", path =
 
 ### Gráfica: Cambio % en el presupuesto de los programas de la UNAM ----
 bd %>% 
-  filter(ciclo %in% 2018:2019) %>% 
-  clean_names() %>% 
-  filter(str_detect(desc_ur, "Universidad Nacional")) %>% 
+  filter(ciclo %in% 2018:2019,
+         str_detect(desc_ur, "Universidad Nacional")) %>% 
   group_by(ciclo, desc_pp) %>% 
   summarise(monto_total = sum(monto)) %>% 
   ungroup() %>% 
@@ -380,9 +378,8 @@ ggsave(filename = "unam_cambio_porcentual_por_programa_2018_2019.png", path = "0
 
 ### Gráfica: Cambio % en el presupuesto de los programas del IPN ----
 bd %>% 
-  filter(ciclo %in% 2018:2019) %>% 
-  clean_names() %>% 
-  filter(str_detect(desc_ur, "Instituto Politécnico Nacional")) %>% 
+  filter(ciclo %in% 2018:2019, 
+         str_detect(desc_ur, "Instituto Politécnico Nacional")) %>% 
   group_by(ciclo, desc_pp) %>% 
   summarise(monto_total = sum(monto)) %>% 
   ungroup() %>% 
@@ -421,9 +418,8 @@ ggsave(filename = "ipn_cambio_porcentual_por_programa_2018_2019.png", path = "03
 
 ### Gráfica: Cambio % en el presupuesto de los programas de la UAM ----
 bd %>% 
-  filter(ciclo %in% 2018:2019) %>% 
-  clean_names() %>% 
-  filter(str_detect(desc_ur, "Universidad Autónoma Metropolitana")) %>% 
+  filter(ciclo %in% 2018:2019, 
+         str_detect(desc_ur, "Universidad Autónoma Metropolitana")) %>% 
   group_by(ciclo, desc_pp) %>% 
   summarise(monto_total = sum(monto)) %>% 
   ungroup() %>% 
@@ -466,9 +462,8 @@ ggsave(filename = "uam_cambio_porcentual_por_programa_2018_2019.png", path = "03
 
 ### Gráfica: Cambio % en el presupuesto de los programas del CIDE ----
 bd %>% 
-  filter(ciclo %in% 2018:2019) %>% 
-  clean_names() %>% 
-  filter(str_detect(desc_ur, "Centro de Investigación y Docencia Económicas, A.C.")) %>% 
+  filter(ciclo %in% 2018:2019,
+         str_detect(desc_ur, "Centro de Investigación y Docencia Económicas, A.C.")) %>% 
   group_by(ciclo, desc_pp) %>% 
   summarise(monto_total = sum(monto)) %>% 
   ungroup() %>% 
@@ -505,9 +500,8 @@ ggsave(filename = "cide_cambio_porcentual_por_programa_2018_2019.png", path = "0
 
 ### Gráfica: Cambio % en el presupuesto de los programas del COLMEX ----
 bd %>% 
-  filter(ciclo %in% 2018:2019) %>% 
-  clean_names() %>% 
-  filter(str_detect(desc_ur, "El Colegio de México, A.C.")) %>% 
+  filter(ciclo %in% 2018:2019,
+         str_detect(desc_ur, "El Colegio de México, A.C.")) %>% 
   group_by(ciclo, desc_pp) %>% 
   summarise(monto_total = sum(monto)) %>% 
   ungroup() %>% 
