@@ -338,7 +338,6 @@ bd %>%
 ggsave(filename = "unam_cambio_porcentual_por_programa_2018_2019.png", path = "03_graficas/cambio_porcentual/", width = 15, height = 10, dpi = 200)
 
 
-
 ### Gráfica: Cambio % en el presupuesto de los programas del IPN ----
 bd %>% 
   clean_names() %>% 
@@ -378,3 +377,39 @@ bd %>%
 
 ggsave(filename = "ipn_cambio_porcentual_por_programa_2018_2019.png", path = "03_graficas/cambio_porcentual/", width = 15, height = 10, dpi = 200)
 
+
+### Gráfica: Cambio % en el presupuesto de los programas del CIDE ----
+bd %>% 
+  clean_names() %>% 
+  filter(str_detect(desc_ur, "Centro de Investigación y Docencia Económicas, A.C.")) %>% 
+  group_by(ciclo, desc_pp) %>% 
+  summarise(monto_total = sum(monto)) %>% 
+  ungroup() %>% 
+  mutate(desc_pp = str_to_title(desc_pp)) %>% 
+  arrange(desc_pp, ciclo) %>% 
+  group_by(desc_pp) %>% 
+  mutate(deflactor = ifelse(ciclo == 2018,  96.3, 100),
+         monto_total_deflactado = (monto_total/deflactor)*100,
+         cambio_por = ((monto_total_deflactado - lag(monto_total_deflactado))/lag(monto_total_deflactado))*100) %>% 
+  ungroup() %>% 
+  mutate(etiqueta = ifelse(ciclo == 2019, str_wrap(desc_pp, width = 30), ""),
+         color_barras = ifelse(cambio_por >= 0, "positivo", "negativo")) %>% 
+  filter(ciclo == 2019) %>% 
+  ggplot(aes(fct_rev(fct_reorder(etiqueta, cambio_por)), cambio_por)) +
+  geom_col(aes(fill = color_barras)) +
+  coord_flip() +
+  scale_y_continuous(breaks = seq(-100, 100, 10), limits = c(-100, 100)) +
+  scale_fill_manual(values = c("tomato", "#74c476")) +
+  labs(title = str_wrap(str_to_upper("cambio porcentual en el presupuesto de los programas del CIDE, ppef 2019 vs. pef 2018"), width = 65), 
+       subtitle = "Cambio porcentual calculado con cifras en términos reales",
+       x = NULL,
+       y = "\nCambio porcentual        ",
+       caption = "\nSebastián Garrido de Sierra / @segasi / Fuente: SHCP, url: bit.ly/PPEF2019") +
+  tema +
+  theme(strip.background = element_rect(color = "grey70", fill = "grey70"),
+        strip.text = element_text(color = "white", size = 12),
+        panel.grid.major.y = element_blank(),
+        legend.position = "none",
+        axis.text.y = element_text(size = 12))
+
+ggsave(filename = "cide_cambio_porcentual_por_programa_2018_2019.png", path = "03_graficas/cambio_porcentual/", width = 15, height = 10, dpi = 200)
