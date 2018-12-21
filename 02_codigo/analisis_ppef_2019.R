@@ -44,8 +44,46 @@ bd_para_que <- read_xlsx("01_datos/bd_para_que_se_gasta.xlsx")
 # Datos de ¿Quién gasta?
 bd_quien <- read_xlsx("01_datos/bd_quien_gasta.xlsx")
 
+### "Limpiar" nombres de variables ----
+pef_11 <- pef_11 %>% clean_names()
+pef_12 <- pef_12 %>% clean_names()
+pef_13 <- pef_13 %>% clean_names()
+pef_14 <- pef_14 %>% clean_names()
+pef_15 <- pef_15 %>% clean_names()
+pef_16 <- pef_16 %>% clean_names()
+pef_17 <- pef_17 %>% clean_names()
+pef_18 <- pef_18 %>% clean_names()
+ppef_19 <- ppef_19 %>% clean_names() 
 
-### Transformar datos ----
+
+### Unir PEFs 2011-2018 ----
+pef_11_18 <- rbind(pef_11, pef_12, pef_13, pef_14, pef_15, pef_16, pef_17, pef_18)
+
+
+### Agregar columnas que faltan para unir las dos bases de datos ----
+pef_11_18_corto <- pef_11_18 %>%  
+  select(ciclo, desc_ramo, desc_ur, desc_pp, contains("monto")) %>% 
+  mutate(monto = monto_aprobado, 
+         monto_proyecto = NA)
+
+ppef_19_corto <- 
+  ppef_19 %>%
+  select(ciclo, desc_ramo, desc_ur, desc_pp, contains("monto")) %>% 
+  mutate(monto = monto_proyecto, 
+         monto_adefas = NA, 
+         monto_aprobado = NA,
+         monto_devengado = NA, 
+         monto_ejercicio = NA, 
+         monto_ejercido = NA, 
+         monto_modificado = NA,
+         monto_pagado = NA)
+
+
+### Unir datos de PEFs 2011-2018 y PPEF 2019 ----
+bd <- rbind(pef_11_18_corto, ppef_19_corto)
+
+
+### Transformar datos de bd_para_que y bd_quien ----
 
 bd_funcion <- bd_para_que %>% 
   mutate(var_real = var_real*100,
