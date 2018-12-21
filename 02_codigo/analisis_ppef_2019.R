@@ -25,8 +25,15 @@ tema <-  theme_minimal() +
 
 # Los datos los obtuve de las secciones ¿PARA QUÉ SE GASTA? y ¿QUIÉN GASTA? en esta liga: https://www.transparenciapresupuestaria.gob.mx/es/PTP/infografia_ppef2019#page3
 
-# PEF 2018. Fuente: https://www.transparenciapresupuestaria.gob.mx
-pef_18 <- read_csv("01_datos/presupuesto_mexico__2018.csv", locale = locale(encoding = "latin1"))
+# PEFs 2011-2018. Fuente: https://www.transparenciapresupuestaria.gob.mx
+pef_11 <- read_csv("01_datos/presupuesto_mexico__2011.csv", locale = locale("es", asciify = TRUE))
+pef_12 <- read_csv("01_datos/presupuesto_mexico__2012.csv", locale = locale("es", asciify = TRUE))
+pef_13 <- read_csv("01_datos/presupuesto_mexico__2013.csv", locale = locale("es", asciify = TRUE))
+pef_14 <- read_csv("01_datos/presupuesto_mexico__2014.csv", locale = locale("es", asciify = TRUE))
+pef_15 <- read_csv("01_datos/presupuesto_mexico__2015.csv", locale = locale("es", asciify = TRUE))
+pef_16 <- read_csv("01_datos/presupuesto_mexico__2016.csv", locale = locale("es", asciify = TRUE))
+pef_17 <- read_csv("01_datos/presupuesto_mexico__2017.csv", locale = locale("es", asciify = TRUE))
+pef_18 <- read_csv("01_datos/presupuesto_mexico__2018.csv", locale = locale("es", asciify = TRUE))
 
 # PPEF 2019 completo
 ppef_19 <- read_csv("01_datos/PPEF_2019.csv", locale = locale(encoding = "latin1"))
@@ -36,7 +43,6 @@ bd_para_que <- read_xlsx("01_datos/bd_para_que_se_gasta.xlsx")
 
 # Datos de ¿Quién gasta?
 bd_quien <- read_xlsx("01_datos/bd_quien_gasta.xlsx")
-
 
 
 ### Transformar datos ----
