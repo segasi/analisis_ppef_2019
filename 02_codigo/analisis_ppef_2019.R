@@ -63,14 +63,14 @@ pef_08_18 <- rbind(pef_08, pef_09, pef_10, pef_11, pef_12, pef_13, pef_14, pef_1
 
 
 ### Agregar columnas que faltan para unir las dos bases de datos ----
-pef_08_18_corto <- pef_08_18 %>%  
-  select(ciclo, desc_ramo, desc_ur, desc_pp, contains("monto")) %>% 
+pef_08_18_para_union <- pef_08_18 %>%  
+  # select(ciclo, desc_ramo, desc_ur, desc_pp, contains("monto")) %>% 
   mutate(monto = monto_aprobado, 
          monto_proyecto = NA)
 
-ppef_19_corto <- 
+ppef_19_para_union <- 
   ppef_19 %>%
-  select(ciclo, desc_ramo, desc_ur, desc_pp, contains("monto")) %>% 
+  # select(ciclo, desc_ramo, desc_ur, desc_pp, contains("monto")) %>% 
   mutate(monto = monto_proyecto, 
          monto_adefas = NA, 
          monto_aprobado = NA,
@@ -78,11 +78,12 @@ ppef_19_corto <-
          monto_ejercicio = NA, 
          monto_ejercido = NA, 
          monto_modificado = NA,
-         monto_pagado = NA)
-
+         monto_pagado = NA, 
+         id_ur = as.character(id_ur), # Modifico el tipo de dato para hacerlo homogéneo con el de la columna id_ur en pef_08_18
+         id_clave_cartera = as.character(id_clave_cartera))  # Modifico el tipo de dato para hacerlo homogéneo con el de la columna id_clave_cartera en pef_08_18
 
 ### Unir datos de PEFs 2008-2018 y PPEF 2019 ----
-bd <- rbind(pef_08_18_corto, ppef_19_corto) 
+bd <- rbind(pef_08_18_para_union, ppef_19_para_union)
 
 
 ### Transformar datos de bd_para_que y bd_quien ----
