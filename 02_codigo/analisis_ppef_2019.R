@@ -21,11 +21,15 @@ tema <-  theme_minimal() +
         axis.title = element_text(size = 18, hjust = 1, face = "bold", margin = margin(0,0,0,0), family="Didact Gothic Regular"),
         axis.text = element_text(size = 16, face = "bold", family="Didact Gothic Regular"))
 
+
 ### Datos ----
 
-# Los datos los obtuve de las secciones ¿PARA QUÉ SE GASTA? y ¿QUIÉN GASTA? en esta liga: https://www.transparenciapresupuestaria.gob.mx/es/PTP/infografia_ppef2019#page3
+# Dado el tamaño de los datos, no están disponibles en el repositorio de GitHub pero se pueden descargar en https://www.transparenciapresupuestaria.gob.mx/es/PTP/datos_presupuestarios_abiertos
 
-# PEFs 2011-2018. Fuente: https://www.transparenciapresupuestaria.gob.mx
+# PEFs 2011-2018. 
+pef_08 <- read_csv("01_datos/presupuesto_mexico__2008.csv", locale = locale("es", asciify = TRUE))
+pef_09 <- read_csv("01_datos/presupuesto_mexico__2009.csv", locale = locale("es", asciify = TRUE))
+pef_10 <- read_csv("01_datos/presupuesto_mexico__2010.csv", locale = locale("es", asciify = TRUE))
 pef_11 <- read_csv("01_datos/presupuesto_mexico__2011.csv", locale = locale("es", asciify = TRUE))
 pef_12 <- read_csv("01_datos/presupuesto_mexico__2012.csv", locale = locale("es", asciify = TRUE))
 pef_13 <- read_csv("01_datos/presupuesto_mexico__2013.csv", locale = locale("es", asciify = TRUE))
@@ -38,13 +42,11 @@ pef_18 <- read_csv("01_datos/presupuesto_mexico__2018.csv", locale = locale("es"
 # PPEF 2019 completo
 ppef_19 <- read_csv("01_datos/PPEF_2019.csv", locale = locale(encoding = "latin1"))
 
-# Datos de ¿Para qué se gasta?
-bd_para_que <- read_xlsx("01_datos/bd_para_que_se_gasta.xlsx")
-
-# Datos de ¿Quién gasta?
-bd_quien <- read_xlsx("01_datos/bd_quien_gasta.xlsx")
 
 ### "Limpiar" nombres de variables ----
+pef_08 <- pef_08 %>% clean_names()
+pef_09 <- pef_09 %>% clean_names()
+pef_10 <- pef_10 %>% clean_names()
 pef_11 <- pef_11 %>% clean_names()
 pef_12 <- pef_12 %>% clean_names()
 pef_13 <- pef_13 %>% clean_names()
@@ -56,12 +58,12 @@ pef_18 <- pef_18 %>% clean_names()
 ppef_19 <- ppef_19 %>% clean_names() 
 
 
-### Unir PEFs 2011-2018 ----
-pef_11_18 <- rbind(pef_11, pef_12, pef_13, pef_14, pef_15, pef_16, pef_17, pef_18)
+### Unir PEFs 2008-2018 ----
+pef_08_18 <- rbind(pef_08, pef_09, pef_10, pef_11, pef_12, pef_13, pef_14, pef_15, pef_16, pef_17, pef_18)
 
 
 ### Agregar columnas que faltan para unir las dos bases de datos ----
-pef_11_18_corto <- pef_11_18 %>%  
+pef_08_18_corto <- pef_08_18 %>%  
   select(ciclo, desc_ramo, desc_ur, desc_pp, contains("monto")) %>% 
   mutate(monto = monto_aprobado, 
          monto_proyecto = NA)
@@ -79,8 +81,8 @@ ppef_19_corto <-
          monto_pagado = NA)
 
 
-### Unir datos de PEFs 2011-2018 y PPEF 2019 ----
-bd <- rbind(pef_11_18_corto, ppef_19_corto)
+### Unir datos de PEFs 2008-2018 y PPEF 2019 ----
+bd <- rbind(pef_08_18_corto, ppef_19_corto) 
 
 
 ### Transformar datos de bd_para_que y bd_quien ----
