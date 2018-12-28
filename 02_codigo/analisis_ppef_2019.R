@@ -24,53 +24,27 @@ tema <-  theme_minimal() +
 
 ### Datos ----
 
-# Dado el tamaño de los datos, no están disponibles en el repositorio de GitHub pero se pueden descargar en https://www.transparenciapresupuestaria.gob.mx/es/PTP/datos_presupuestarios_abiertos
+# Dado el tamaño de las bases de datos, no están disponibles en el repositorio de GitHub pero se pueden descargar en las ligas que indico como comentario
 
 # PEFs 2011-2018. 
-pef_08 <- read_csv("../../../10 recursos/datos/shcp/pef/presupuesto_mexico__2008.csv", locale = locale("es", asciify = TRUE))
-pef_09 <- read_csv("../../../10 recursos/datos/shcp/pef/presupuesto_mexico__2009.csv", locale = locale("es", asciify = TRUE))
-pef_10 <- read_csv("../../../10 recursos/datos/shcp/pef/presupuesto_mexico__2010.csv", locale = locale("es", asciify = TRUE))
-pef_11 <- read_csv("../../../10 recursos/datos/shcp/pef/presupuesto_mexico__2011.csv", locale = locale("es", asciify = TRUE))
-pef_12 <- read_csv("../../../10 recursos/datos/shcp/pef/presupuesto_mexico__2012.csv", locale = locale("es", asciify = TRUE))
-pef_13 <- read_csv("../../../10 recursos/datos/shcp/pef/presupuesto_mexico__2013.csv", locale = locale("es", asciify = TRUE))
-pef_14 <- read_csv("../../../10 recursos/datos/shcp/pef/presupuesto_mexico__2014.csv", locale = locale("es", asciify = TRUE))
-pef_15 <- read_csv("../../../10 recursos/datos/shcp/pef/presupuesto_mexico__2015.csv", locale = locale("es", asciify = TRUE))
-pef_16 <- read_csv("../../../10 recursos/datos/shcp/pef/presupuesto_mexico__2016.csv", locale = locale("es", asciify = TRUE))
-pef_17 <- read_csv("../../../10 recursos/datos/shcp/pef/presupuesto_mexico__2017.csv", locale = locale("es", asciify = TRUE))
-pef_18 <- read_csv("../../../10 recursos/datos/shcp/pef/presupuesto_mexico__2018.csv", locale = locale("es", asciify = TRUE))
+pef_08_18 <- read_csv("../../../10 recursos/datos/shcp/pef/presupuesto_mexico.csv", locale = locale("es", asciify = TRUE))
 
 # PPEF 2019 completo
 ppef_19 <- read_csv("../../../10 recursos/datos/shcp/ppef/PPEF_2019.csv", locale = locale(encoding = "latin1"))
 
 
 ### "Limpiar" nombres de variables ----
-pef_08 <- pef_08 %>% clean_names()
-pef_09 <- pef_09 %>% clean_names()
-pef_10 <- pef_10 %>% clean_names()
-pef_11 <- pef_11 %>% clean_names()
-pef_12 <- pef_12 %>% clean_names()
-pef_13 <- pef_13 %>% clean_names()
-pef_14 <- pef_14 %>% clean_names()
-pef_15 <- pef_15 %>% clean_names()
-pef_16 <- pef_16 %>% clean_names()
-pef_17 <- pef_17 %>% clean_names()
-pef_18 <- pef_18 %>% clean_names()
+pef_08_18 <- pef_08_18 %>% clean_names()
 ppef_19 <- ppef_19 %>% clean_names() 
-
-
-### Unir PEFs 2008-2018 ----
-pef_08_18 <- rbind(pef_08, pef_09, pef_10, pef_11, pef_12, pef_13, pef_14, pef_15, pef_16, pef_17, pef_18)
 
 
 ### Agregar columnas que faltan para unir las dos bases de datos ----
 pef_08_18_para_union <- pef_08_18 %>%  
-  # select(ciclo, desc_ramo, desc_ur, desc_pp, contains("monto")) %>% 
   mutate(monto = monto_aprobado, 
          monto_proyecto = NA)
 
 ppef_19_para_union <- 
   ppef_19 %>%
-  # select(ciclo, desc_ramo, desc_ur, desc_pp, contains("monto")) %>% 
   mutate(monto = monto_proyecto, 
          monto_adefas = NA, 
          monto_aprobado = NA,
