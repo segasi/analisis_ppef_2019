@@ -27,9 +27,11 @@ tema <-  theme_minimal() +
 # Dado el tamaño de las bases de datos, no están disponibles en el repositorio de GitHub pero se pueden descargar en las ligas que indico como comentario
 
 # PEFs 2011-2018. 
+# Url: http://s3.amazonaws.com/datastore.openspending.org/667df60aa07c34260eae9b55b2778712/presupuesto_mexico/final/data/presupuesto_mexico.csv
 pef_08_18 <- read_csv("../../../10 recursos/datos/shcp/pef/presupuesto_mexico.csv", locale = locale("es", asciify = TRUE))
 
 # PPEF 2019 completo
+# Url: 
 ppef_19 <- read_csv("../../../10 recursos/datos/shcp/ppef/PPEF_2019.csv", locale = locale(encoding = "latin1"))
 
 
